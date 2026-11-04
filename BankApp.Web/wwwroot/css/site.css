@@ -29,3 +29,13 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* Färgtema: marinblå + teal */
+:root {
+    --tblr-primary: #1D4E89;
+    --tblr-primary-rgb: 29, 78, 137;
+}
+
+.navbar-vertical {
+    background-color: #0B2545;
+}
