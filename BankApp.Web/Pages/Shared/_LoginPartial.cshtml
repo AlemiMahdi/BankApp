@@ -3,22 +3,29 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-<ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <li class="nav-item">
-            <span class="nav-link text-dark">Hej @UserManager.GetUserName(User)!</span>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark border-0">Logga ut</button>
-            </form>
-        </li>
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Logga in</a>
-        </li>
-    }
+<ul class="navbar-nav border-top mt-3 pt-3">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+        <span class="nav-link">
+            <span class="nav-link-title">@UserManager.GetUserName(User)</span>
+        </span>
+    </li>
+    <li class="nav-item">
+        <form asp-area="Identity" asp-page="/Account/Logout"
+              asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
+            <button type="submit" class="nav-link btn btn-link border-0 w-100 text-start">
+                <span class="nav-link-title">Logga ut</span>
+            </button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
+            <span class="nav-link-title">Logga in</span>
+        </a>
+    </li>
+}
 </ul>
