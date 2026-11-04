@@ -1,7 +1,10 @@
-using BankApp.Data.Models;                 // NY
+using BankApp.Data.Models;
 using BankApp.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using BankApp.Data.Repositories;
+using BankApp.Services;
+using BankApp.Services.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
+builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 
 var app = builder.Build();
 
