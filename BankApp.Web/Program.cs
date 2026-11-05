@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using BankApp.Data.Repositories;
 using BankApp.Services;
 using BankApp.Services.Mapping;
+using BankApp.Services.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
 builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
 builder.Services.AddScoped<IStatisticsService, StatisticsService>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 var app = builder.Build();
 
