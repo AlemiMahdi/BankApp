@@ -35,6 +35,14 @@
                                 </a>
                             </li>
                         }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Cashier"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Customers/Index">
+                                    <span class="nav-link-title">Kunder</span>
+                                </a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

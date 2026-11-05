@@ -1,0 +1,76 @@
+﻿@page
+@model BankApp.Web.Pages.Customers.IndexModel
+@{
+    ViewData["Title"] = "Kunder";
+}
+
+<div class="page-header d-print-none">
+    <h2 class="page-title">Kunder</h2>
+</div>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <form method="get" class="row g-2">
+            <div class="col-md-5">
+                <input type="text" name="Name" value="@Model.Name" class="form-control" placeholder="Namn" />
+            </div>
+            <div class="col-md-5">
+                <input type="text" name="City" value="@Model.City" class="form-control" placeholder="Stad" />
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Sök</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="table-responsive">
+        <table class="table table-vcenter card-table">
+            <thead>
+                <tr>
+                    <th>Kundnummer</th>
+                    <th>Personnummer</th>
+                    <th>Namn</th>
+                    <th>Adress</th>
+                    <th>Stad</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Result.Customers.Count == 0)
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-secondary">Inga kunder hittades.</td>
+                    </tr>
+                }
+                @foreach (var customer in Model.Result.Customers)
+                {
+                    <tr>
+                        <td>@customer.CustomerId</td>
+                        <td>@customer.NationalId</td>
+                        <td>@customer.Givenname @customer.Surname</td>
+                        <td>@customer.Streetaddress</td>
+                        <td>@customer.City</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer d-flex align-items-center">
+        <p class="m-0 text-secondary">
+            Sida @Model.Result.Page av @Model.Result.TotalPages (@Model.Result.TotalCount kunder)
+        </p>
+        <ul class="pagination m-0 ms-auto">
+            <li class="page-item @(Model.Result.HasPrevious ? "" : "disabled")">
+                <a class="page-link" asp-page="./Index"
+                   asp-route-Name="@Model.Name" asp-route-City="@Model.City"
+                   asp-route-PageNumber="@(Model.Result.Page - 1)">Föregående</a>
+            </li>
+            <li class="page-item @(Model.Result.HasNext ? "" : "disabled")">
+                <a class="page-link" asp-page="./Index"
+                   asp-route-Name="@Model.Name" asp-route-City="@Model.City"
+                   asp-route-PageNumber="@(Model.Result.Page + 1)">Nästa</a>
+            </li>
+        </ul>
+    </div>
+</div>
