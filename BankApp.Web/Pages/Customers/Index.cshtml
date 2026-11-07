@@ -48,13 +48,27 @@
                     <tr>
                         <td>@customer.CustomerId</td>
                         <td>@customer.NationalId</td>
-                        <td>@customer.Givenname @customer.Surname</td>
+                        <td>
+                            <a asp-page="./Details" asp-route-id="@customer.CustomerId">@customer.Givenname @customer.Surname</a>
+                        </td>
                         <td>@customer.Streetaddress</td>
                         <td>@customer.City</td>
                     </tr>
                 }
             </tbody>
         </table>
+    </div>
+    <div class="card mt-3">
+        <div class="card-body">
+            <form method="get" asp-page="./Details" class="row g-2">
+                <div class="col-md-10">
+                    <input type="number" name="id" min="1" class="form-control" placeholder="Kundnummer" required />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Visa kundbild</button>
+                </div>
+            </form>
+        </div>
     </div>
     <div class="card-footer d-flex align-items-center">
         <p class="m-0 text-secondary">

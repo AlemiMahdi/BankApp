@@ -9,5 +9,6 @@ namespace BankApp.Data.Repositories
     {
         Task<int> CountAsync(string? name, string? city);
         Task<List<Customer>> SearchAsync(string? name, string? city, int skip, int take);
+        Task<Customer?> GetWithAccountsAsync(int id);
     }
 }

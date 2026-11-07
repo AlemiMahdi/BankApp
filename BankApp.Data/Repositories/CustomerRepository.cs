@@ -46,5 +46,14 @@ namespace BankApp.Data.Repositories
                 .Take(take)
                 .ToListAsync();
         }
+
+        public Task<Customer?> GetWithAccountsAsync(int id)
+        {
+            return _db.Customers
+                .AsNoTracking()
+                .Include(c => c.Dispositions)
+                    .ThenInclude(d => d.Account)
+                .FirstOrDefaultAsync(c => c.CustomerId == id);
+        }
     }
 }

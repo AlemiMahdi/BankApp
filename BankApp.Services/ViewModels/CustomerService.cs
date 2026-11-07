@@ -33,4 +33,14 @@ public class CustomerService : ICustomerService
             TotalCount = totalCount
         };
     }
+
+    public async Task<CustomerDetailsViewModel?> GetDetailsAsync(int id)
+    {
+        var customer = await _repository.GetWithAccountsAsync(id);
+        if (customer == null) return null;
+
+        var viewModel = _mapper.Map<CustomerDetailsViewModel>(customer);
+        viewModel.Accounts = viewModel.Accounts.OrderBy(a => a.AccountId).ToList();
+        return viewModel;
+    }
 }
