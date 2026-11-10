@@ -1,0 +1,126 @@
+﻿@page
+@model BankApp.Web.Pages.Accounts.DetailsModel
+@{
+    ViewData["Title"] = "Kontobild";
+}
+
+<div class="page-header d-print-none">
+    <h2 class="page-title">Kontobild</h2>
+</div>
+
+@if (Model.Account == null)
+{
+    <div class="alert alert-warning mt-3">
+        Inget konto med kontonummer @Model.Id hittades.
+    </div>
+    <a asp-page="/Customers/Index" class="btn btn-primary">Till kunder</a>
+}
+else
+{
+    var account = Model.Account;
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-3">Kontonummer</dt>
+                <dd class="col-sm-9">@account.AccountId</dd>
+
+                <dt class="col-sm-3">Saldo</dt>
+                <dd class="col-sm-9">@account.Balance.ToString("N2")</dd>
+
+                <dt class="col-sm-3">Skapat</dt>
+                <dd class="col-sm-9">@account.Created.ToString("yyyy-MM-dd")</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-header">
+            <h3 class="card-title">Transaktioner</h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Typ</th>
+                        <th>Operation</th>
+                        <th class="text-end">Belopp</th>
+                        <th class="text-end">Saldo</th>
+                    </tr>
+                </thead>
+                <tbody id="transactions-body">
+                    @if (account.Transactions.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-secondary">Inga transaktioner.</td>
+                        </tr>
+                    }
+                    @foreach (var t in account.Transactions)
+                    {
+                        <tr>
+                            <td>@t.Date.ToString("yyyy-MM-dd")</td>
+                            <td>@t.Type</td>
+                            <td>@t.Operation</td>
+                            <td class="text-end">@t.Amount.ToString("N2")</td>
+                            <td class="text-end">@t.Balance.ToString("N2")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (account.HasMore)
+        {
+            <div class="card-footer text-center" id="load-more-container">
+                <button type="button" id="load-more" class="btn btn-outline-primary"
+                        data-url="@Url.Page("/Accounts/Details", "Transactions", new { id = account.AccountId })"
+                        data-skip="@account.Transactions.Count">
+                    Visa fler
+                </button>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script>
+        (function () {
+            const button = document.getElementById('load-more');
+            if (!button) return;
+
+            const body = document.getElementById('transactions-body');
+            const container = document.getElementById('load-more-container');
+
+            button.addEventListener('click', async function () {
+                button.disabled = true;
+                try {
+                    const skip = parseInt(button.dataset.skip, 10);
+                    const response = await fetch(button.dataset.url + '&skip=' + skip);
+                    if (!response.ok) throw new Error('Request failed');
+                    const data = await response.json();
+
+                    data.transactions.forEach(function (t) {
+                        const tr = document.createElement('tr');
+                        [t.date, t.type, t.operation, t.amount, t.balance].forEach(function (value, index) {
+                            const td = document.createElement('td');
+                            td.textContent = value;
+                            if (index >= 3) td.className = 'text-end';
+                            tr.appendChild(td);
+                        });
+                        body.appendChild(tr);
+                    });
+
+                    button.dataset.skip = skip + data.transactions.length;
+
+                    if (!data.hasMore) {
+                        container.remove();
+                    }
+                } catch (error) {
+                    alert('Kunde inte hämta fler transaktioner.');
+                } finally {
+                    button.disabled = false;
+                }
+            });
+        })();
+    </script>
+}

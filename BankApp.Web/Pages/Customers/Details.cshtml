@@ -76,7 +76,9 @@ else
                     @foreach (var account in c.Accounts)
                     {
                         <tr>
-                            <td>@account.AccountId</td>
+                            <td>
+                                <a asp-page="/Accounts/Details" asp-route-id="@account.AccountId">@account.AccountId</a>
+                            </td>
                             <td>@account.Type</td>
                             <td>@account.Created.ToString("yyyy-MM-dd")</td>
                             <td class="text-end">@account.Balance.ToString("N2")</td>

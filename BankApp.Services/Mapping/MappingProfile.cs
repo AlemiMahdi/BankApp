@@ -18,5 +18,9 @@ public class MappingProfile : Profile
             .ForMember(d => d.Frequency, o => o.MapFrom(s => s.Account.Frequency))
             .ForMember(d => d.Created, o => o.MapFrom(s => s.Account.Created))
             .ForMember(d => d.Balance, o => o.MapFrom(s => s.Account.Balance));
+
+        CreateMap<Account, AccountDetailsViewModel>()
+            .ForMember(d => d.Transactions, o => o.Ignore());
+        CreateMap<Transaction, TransactionViewModel>();
     }
 }
