@@ -6,9 +6,12 @@ using BankApp.Data.Repositories;
 using BankApp.Services;
 using BankApp.Services.Mapping;
 using BankApp.Services.ViewModels;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 // Add services to the container.
 builder.Services.AddRazorPages();
 
@@ -29,6 +32,8 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 
 var app = builder.Build();
