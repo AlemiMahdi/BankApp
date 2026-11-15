@@ -1,0 +1,41 @@
+﻿@page
+@model BankApp.Web.Pages.Accounts.WithdrawModel
+@{
+    ViewData["Title"] = "Uttag";
+}
+
+<div class="page-header d-print-none">
+    <h2 class="page-title">Uttag</h2>
+</div>
+
+@if (Model.Account == null)
+{
+    <div class="alert alert-warning mt-3">Inget konto med kontonummer @Model.Id hittades.</div>
+}
+else
+{
+    <div class="card mt-3">
+        <div class="card-body">
+            <p>Konto <strong>@Model.Account.AccountId</strong>, saldo <strong>@Model.Account.Balance.ToString("N2")</strong></p>
+
+            @if (Model.ErrorMessage != null)
+            {
+                <div class="alert alert-danger">@Model.ErrorMessage</div>
+            }
+
+            <form method="post">
+                <div class="mb-3">
+                    <label asp-for="Input.Amount" class="form-label"></label>
+                    <input asp-for="Input.Amount" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="Input.Amount" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Ta ut</button>
+                <a asp-page="./Details" asp-route-id="@Model.Account.AccountId" class="btn btn-link">Avbryt</a>
+            </form>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
